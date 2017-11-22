@@ -34,35 +34,35 @@ class Graph{
     int V;
     struct AdjList *arr;
 
-  public: 
-    Graph( int V )
-    {
-      this->V = V;
-      arr = new AdjList[ V ];
-      for ( int index = 0; index < V; index++ )
-      {
-        arr[ index ].head = NULL;
-      }
-    }
+public: 
+	Graph( int V )
+    	{
+      		this->V = V;
+      		arr = new AdjList[ V ];
+      		for ( int index = 0; index < V; index++ )
+	      	{
+			arr[ index ].head = NULL;
+	      	}
+    	}
 
-    Node * newNode( int currentEnergy, int dest )
-    {
-    	Node *newNode = new Node;
-    	newNode->currentEnergy = currentEnergy;
-    	newNode->dest = dest;
-    	newNode->next = NULL;
+  	Node * newNode( int currentEnergy, int dest )
+    	{
+    		Node *newNode = new Node;
+    		newNode->currentEnergy = currentEnergy;
+    		newNode->dest = dest;
+    		newNode->next = NULL;
+	
+    		return newNode;
+    	}
 
-    	return newNode;
-    }
-
-    void addEdge( int src, int currentEnergy, int dest )
-   	{
+	void addEdge( int src, int currentEnergy, int dest )
+	{
    		Node *tempNode = newNode( currentEnergy, dest );
    		tempNode->next = arr[ src ].head;
    		arr[ src ].head = tempNode;
    	}
 
-void printGraph()
+	void printGraph()
    	{
    		int index;
    		for ( index = 0; index < V; index++ )
@@ -97,7 +97,7 @@ int main()
 	for( int index = 0; index < size; index++ )
 	{
 		
-		energy[ index ] = rand() % size;
+		energy[ index ] = rand() % size + 1;
 		pointers[ index ] = rand() % size;
 
 		network.addEdge( index, energy[ index ], pointers[ index ] );
