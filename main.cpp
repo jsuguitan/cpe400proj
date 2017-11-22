@@ -57,6 +57,7 @@ public:
 
 	void addEdge( int src, int currentEnergy, int dest )
 	{
+		if( )
    		Node *tempNode = newNode( currentEnergy, dest );
    		tempNode->next = arr[ src ].head;
    		arr[ src ].head = tempNode;
@@ -89,6 +90,7 @@ public:
 };
 
 void createGraph( Graph & network, int size );
+bool numExists( int arr[], int index, int temp );
 
 int main()
 {
@@ -101,36 +103,17 @@ int main()
 
 	createGraph( network, size );
 
-/*
-	int energy[ size ];
-	int pointers[ size ];
-
-	for( int index = 0; index < size; index++ )
-	{
-		//determines energy for each node
-		energy[ index ] = rand() % size + 1;
- 		//determines node which curr node points to 
-		pointers[ index ] = rand() % size;
-		
-		//add edge
-		network.addEdge( index, energy[ index ], pointers[ index ] );
-	}
-
-*/
 	network.printGraph();
-
-
-	
 
 	return 0;
 }
 
 void createGraph( Graph & network, int size )
 {
-	int energy[ size ] = 0;
+	int energy[ size ];
 	int pointers[ size ];
 	int temp;	
-	bool exists;
+	bool exists = false;
 
 	for ( int index = 0; index < size; index ++ )
 	{
@@ -138,14 +121,24 @@ void createGraph( Graph & network, int size )
 		energy[ index ] = rand() % size + 1;
  		//determines node which curr node points to 
 		temp = pointers[ index ] = rand() % size;
-		
-		for( int j = 0; j < index; index++ 
+
+		while( index == pointers[ index ] )
 		{
+			temp = pointers[ index ] = rand() % size;
+		}
+
+		exists = numExists( pointers, index, temp );
+		while( exists )
+		{
+			temp = pointers[ index ] = rand() % size;
+
 			while( index == pointers[ index ] )
 			{
-				pointers[ index ] = rand() % size;
+				temp = pointers[ index ] = rand() % size;
 			}
+			exists = numExists( pointers, index, temp );
 		}
+
 		//add edge
 		network.addEdge( index, energy[ index ], pointers[ index ] );	
 	}
@@ -155,8 +148,18 @@ void createGraph( Graph & network, int size )
 		cout << "ENERGY " << energy[ index ] << endl;
 		cout << "POINT " << pointers[ index ] << endl;
 	}
+}
 
-
+bool numExists( int arr[], int index, int temp )
+{
+	for ( int j = 0; j < index; j++ )
+	{
+		if( temp == arr[ j ] )
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 
