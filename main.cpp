@@ -60,12 +60,9 @@ class Graph{
    		Node *tempNode = newNode( currentEnergy, dest );
    		tempNode->next = arr[ src ].head;
    		arr[ src ].head = tempNode;
-   		//tempNode = newNode( currentEnergy, src );
-   		//tempNode->next = arr[ dest ].head;
-   		//arr[ dest ].head = tempNode;
    	}
 
-   	void printGraph()
+void printGraph()
    	{
    		int index;
    		for ( index = 0; index < V; index++ )
