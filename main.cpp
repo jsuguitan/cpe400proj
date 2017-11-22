@@ -60,6 +60,10 @@ public:
    		Node *tempNode = newNode( currentEnergy, dest );
    		tempNode->next = arr[ src ].head;
    		arr[ src ].head = tempNode;
+
+		tempNode = newNode( currentEnergy, src );
+		tempNode->next = arr[ dest ].head;
+		arr[ dest ].head = tempNode;
    	}
 
 	void printGraph()
@@ -70,7 +74,8 @@ public:
    			Node *temp = arr[ index ].head;
 
    			cout << "\n Adjacency list of vertex " << index <<" \n head ";
-   			while( temp )
+			cout << "(" << temp->currentEnergy << ")";  			
+			while( temp )
    			{
    				cout << "-> " << temp->dest;
    				temp = temp->next;
@@ -83,6 +88,8 @@ public:
 
 };
 
+void createGraph( Graph & network, int size );
+
 int main()
 {
 	int size; 
@@ -91,18 +98,25 @@ int main()
 	cout << endl;
 
 	Graph network( size );
+
+	createGraph( network, size );
+
+/*
 	int energy[ size ];
 	int pointers[ size ];
 
 	for( int index = 0; index < size; index++ )
 	{
-		
+		//determines energy for each node
 		energy[ index ] = rand() % size + 1;
+ 		//determines node which curr node points to 
 		pointers[ index ] = rand() % size;
-
+		
+		//add edge
 		network.addEdge( index, energy[ index ], pointers[ index ] );
 	}
 
+*/
 	network.printGraph();
 
 
@@ -110,5 +124,41 @@ int main()
 
 	return 0;
 }
+
+void createGraph( Graph & network, int size )
+{
+	int energy[ size ] = 0;
+	int pointers[ size ];
+	int temp;	
+	bool exists;
+
+	for ( int index = 0; index < size; index ++ )
+	{
+		//determines energy for each node
+		energy[ index ] = rand() % size + 1;
+ 		//determines node which curr node points to 
+		temp = pointers[ index ] = rand() % size;
+		
+		for( int j = 0; j < index; index++ 
+		{
+			while( index == pointers[ index ] )
+			{
+				pointers[ index ] = rand() % size;
+			}
+		}
+		//add edge
+		network.addEdge( index, energy[ index ], pointers[ index ] );	
+	}
+
+	for ( int index = 0; index < size; index++ )
+	{
+		cout << "ENERGY " << energy[ index ] << endl;
+		cout << "POINT " << pointers[ index ] << endl;
+	}
+
+
+}
+
+
 
 
