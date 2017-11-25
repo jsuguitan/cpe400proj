@@ -14,12 +14,14 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
 
 struct Node{
-  int currentEnergy;
+  float currentEnergy;
+  float energyUsed;
   int dest;
   struct Node* next;
 };
@@ -29,42 +31,44 @@ struct AdjList
   struct Node *head;
 };
 
-class Graph{
-  private: 
+class Graph{ 
+    
+public: 
     int V;
     struct AdjList *arr;
-
-public: 
 	Graph( int V )
     	{
       		this->V = V;
       		arr = new AdjList[ V ];
       		for ( int index = 0; index < V; index++ )
 	      	{
-			arr[ index ].head = NULL;
+				arr[ index ].head = NULL;
 	      	}
     	}
 
-  	Node * newNode( int currentEnergy, int dest )
+  	Node * newNode( int dest )
     	{
     		Node *newNode = new Node;
-    		newNode->currentEnergy = currentEnergy;
     		newNode->dest = dest;
     		newNode->next = NULL;
 	
     		return newNode;
     	}
 
-	void addEdge( int src, int currentEnergy, int dest )
+	void addEdge( int src, float currentEnergy1, float energyUsed1, float currentEnergy2, float energyUsed2, int dest )
 	{
-		if( )
-   		Node *tempNode = newNode( currentEnergy, dest );
+   		Node *tempNode = newNode( dest );
+   		tempNode->currentEnergy = currentEnergy1;
+   		tempNode->energyUsed = energyUsed1;
    		tempNode->next = arr[ src ].head;
    		arr[ src ].head = tempNode;
 
-		tempNode = newNode( currentEnergy, src );
+		tempNode = newNode( src );
+		tempNode->currentEnergy = currentEnergy2;
+   		tempNode->energyUsed = energyUsed2;
 		tempNode->next = arr[ dest ].head;
 		arr[ dest ].head = tempNode;
+		
    	}
 
 	void printGraph()
@@ -74,8 +78,11 @@ public:
    		{
    			Node *temp = arr[ index ].head;
 
-   			cout << "\n Adjacency list of vertex " << index <<" \n head ";
-			cout << "(" << temp->currentEnergy << ")";  			
+   			cout << endl << "Adjacency list of vertex " << index << endl;
+   			cout << "current energy: " << temp->currentEnergy << endl;
+   			cout << "energy consumption: " << temp->energyUsed << endl;
+
+   			cout << "head "; 			
 			while( temp )
    			{
    				cout << "-> " << temp->dest;
@@ -89,64 +96,136 @@ public:
 
 };
 
-void createGraph( Graph & network, int size );
+void createRandomEnergy( float arr[], int totalSize, int sinkSize );
+void createRandomPointers( int pointers[], int totalSize, int sinkSize );
+void createNetwork( float energy[], int pointers[], Graph & graph );
 bool numExists( int arr[], int index, int temp );
+
 
 int main()
 {
-	int size; 
-	cout << "Enter the number of nodes in the network: ";
-	cin >> size;
+	int size = 50;
+	int sinkSize;
+	int totalSize;
+	
+
+	cout << "Enter the number of sinks (1-2) in the network: ";
+	cin >> sinkSize;
 	cout << endl;
 
-	Graph network( size );
+	totalSize = size + sinkSize;
+	Graph graph( totalSize );
 
-	createGraph( network, size );
+	float energy[ totalSize ];
+	int pointers[ totalSize ];
 
-	network.printGraph();
+	createRandomEnergy( energy, totalSize, sinkSize );
+	createRandomPointers( pointers, totalSize, sinkSize );
+
+	createNetwork( energy, pointers, graph );
+
+	graph.printGraph();
 
 	return 0;
 }
 
-void createGraph( Graph & network, int size )
+void createRandomEnergy( float arr[], int totalSize, int sinkSize )
 {
-	int energy[ size ];
-	int pointers[ size ];
-	int temp;	
-	bool exists = false;
 
-	for ( int index = 0; index < size; index ++ )
+	srand( time( 0 ) );
+	for ( int index = 0; index < totalSize; index++ )
 	{
-		//determines energy for each node
-		energy[ index ] = rand() % size + 1;
- 		//determines node which curr node points to 
-		temp = pointers[ index ] = rand() % size;
-
-		while( index == pointers[ index ] )
+		if( index < sinkSize )
 		{
-			temp = pointers[ index ] = rand() % size;
+			arr[ index ] = 0;
 		}
-
-		exists = numExists( pointers, index, temp );
-		while( exists )
+		else
 		{
-			temp = pointers[ index ] = rand() % size;
-
-			while( index == pointers[ index ] )
-			{
-				temp = pointers[ index ] = rand() % size;
-			}
-			exists = numExists( pointers, index, temp );
+			arr[ index ] = ( float ) ( ( rand() % 100 ) + 1 ) / (float) 100.0;
 		}
-
-		//add edge
-		network.addEdge( index, energy[ index ], pointers[ index ] );	
+		cout << "energy " << arr[ index ] << endl;
 	}
+}
 
-	for ( int index = 0; index < size; index++ )
+void createRandomPointers( int pointers[], int totalSize, int sinkSize )
+{
+	srand( time( 0 ) );
+	int pointerTemp;
+	bool exists = false;
+	for ( int index = 0; index < totalSize; index++ )
 	{
-		cout << "ENERGY " << energy[ index ] << endl;
-		cout << "POINT " << pointers[ index ] << endl;
+		pointerTemp = rand() % totalSize;
+		//don't want sinks to point to eachother
+		if( index < sinkSize )
+		{
+			while( pointerTemp == index || pointerTemp == index + 1 )
+			{
+				pointerTemp = rand() % totalSize;
+			}
+	
+			exists = numExists( pointers, index, pointerTemp );
+
+			while( exists )
+			{
+				pointerTemp = rand() % totalSize;
+
+				while( pointerTemp == index )
+				{
+					pointerTemp = rand() % totalSize;	
+				}
+
+				exists = numExists( pointers, index, pointerTemp );
+
+				if( sinkSize == index + 1 && pointerTemp < sinkSize )
+				{
+					exists = true;
+				}
+				if( pointers[ index ] == pointerTemp && pointers[ pointerTemp ] == index )
+				{
+					exists = true;
+				}
+			}
+
+			pointers[ index ] = pointerTemp;
+		}
+		else
+		{
+
+			while( pointerTemp == index )
+			{
+				pointerTemp = rand() % totalSize;	
+			}
+
+			exists = numExists( pointers, index, pointerTemp );
+
+			while( exists )
+			{
+				pointerTemp = rand() % totalSize;
+
+				while( pointerTemp == index )
+				{
+					pointerTemp = rand() % totalSize;	
+				}
+				exists = numExists( pointers, index, pointerTemp );
+
+				if( pointers[ index ] == pointerTemp && pointers[ pointerTemp ] == index )
+				{
+					exists = true;
+				}
+			}
+
+			pointers[ index ] = pointerTemp;
+		}
+		cout << "Pointers " << pointers[ index ] << endl;
+	}
+}
+
+
+void createNetwork( float energy[], int pointers[], Graph & graph )
+{
+	for ( int index = 0; index < graph.V; index++ )
+	{
+		graph.addEdge( index, 100.0, energy[ index ], 100.0, energy[ pointers[ index ]], pointers[ index ] );
 	}
 }
 
