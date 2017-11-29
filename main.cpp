@@ -12,10 +12,13 @@
   * @note None
   */
 
+
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
 #include <ctime>
+
+#define MAX_NUM 10000
 
 using namespace std;
 
@@ -35,6 +38,12 @@ struct AdjList
   struct Node *head;
 };
 
+///// Additional Struct
+struct PacketInfo{
+	int nodeNum;
+	int numberOfPackets;
+};
+///////////////////////////
 class Graph{ 
     
 public: 
@@ -109,13 +118,21 @@ bool numExists( int arr[], int index, int temp );
 
 
 
+
+
+
+
+
+
 int main()
 {
-
+	
 	int nodeSize; 
 	int sinkSize;
 	int totalSize;
 	ifstream fin;
+	PacketInfo packetArr[ MAX_NUM ];
+
 	fin.open( "input.txt" );
 
 	if( !fin.good() )
@@ -129,6 +146,14 @@ int main()
 	cout << sinkSize;
 
 	totalSize = nodeSize + sinkSize;
+
+
+	 //keep inputting until there is no more in input file
+while( !fin.eof() )
+{
+	fin >> packetArr[ index ]. nodeNum;
+	fin >> packetArr[ index ]. numberOfPackets;
+}
 
 	int graph[ totalSize ][ totalSize ];
 
@@ -272,6 +297,7 @@ bool numExists( int arr[], int index, int temp )
 	}
 	return false;
 }
+
 
 
 
