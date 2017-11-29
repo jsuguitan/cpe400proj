@@ -13,11 +13,15 @@
   */
 
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
 #include <ctime>
 
 using namespace std;
 
+//////////////////////////
+//// Graph Definition ////
+//////////////////////////
 
 struct Node{
   float currentEnergy;
@@ -57,12 +61,14 @@ public:
 
 	void addEdge( int src, float currentEnergy1, float energyUsed1, float currentEnergy2, float energyUsed2, int dest )
 	{
+		//hello packets
    		Node *tempNode = newNode( dest );
    		tempNode->currentEnergy = currentEnergy1;
    		tempNode->energyUsed = energyUsed1;
    		tempNode->next = arr[ src ].head;
    		arr[ src ].head = tempNode;
 
+   		//hello packets
 		tempNode = newNode( src );
 		tempNode->currentEnergy = currentEnergy2;
    		tempNode->energyUsed = energyUsed2;
@@ -102,9 +108,34 @@ void createNetwork( float energy[], int pointers[], Graph & graph );
 bool numExists( int arr[], int index, int temp );
 
 
+
 int main()
 {
-	int size = 50;
+
+	int nodeSize; 
+	int sinkSize;
+	int totalSize;
+	ifstream fin;
+	fin.open( "input.txt" );
+
+	if( !fin.good() )
+	{
+		return 0;
+	}
+
+	fin >> nodeSize;
+	fin >> sinkSize;
+	cout << nodeSize;
+	cout << sinkSize;
+
+	totalSize = nodeSize + sinkSize;
+
+	int graph[ totalSize ][ totalSize ];
+
+	
+
+	/*
+	int size = 8;
 	int sinkSize;
 	int totalSize;
 	
@@ -126,6 +157,7 @@ int main()
 
 	graph.printGraph();
 
+	*/
 	return 0;
 }
 
