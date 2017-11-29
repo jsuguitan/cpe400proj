@@ -23,6 +23,7 @@ using namespace std;
 //// Graph Definition ////
 //////////////////////////
 
+
 struct Node{
   float currentEnergy;
   float energyUsed;
@@ -102,12 +103,17 @@ public:
 
 };
 
+
+
 void createRandomEnergy( float arr[], int totalSize, int sinkSize );
+/*
 void createRandomPointers( int pointers[], int totalSize, int sinkSize );
 void createNetwork( float energy[], int pointers[], Graph & graph );
 bool numExists( int arr[], int index, int temp );
+*/
 
-
+//void create_graph( int 2d[ totalSize ][ totalSize ], int totalSize, int nodeSize, int sinkSize );
+bool create_links( Graph &graph, int totalSize, int sinkSize );
 
 int main()
 {
@@ -115,23 +121,35 @@ int main()
 	int nodeSize; 
 	int sinkSize;
 	int totalSize;
+	bool success;
 	ifstream fin;
-	fin.open( "input.txt" );
+
+	fin.open( "links.txt" );
 
 	if( !fin.good() )
 	{
 		return 0;
 	}
+	else 
+	{
+		fin >> nodeSize;
+		fin >> sinkSize;
+		totalSize = nodeSize + sinkSize;
+	}
+	fin.close();
 
-	fin >> nodeSize;
-	fin >> sinkSize;
-	cout << nodeSize;
-	cout << sinkSize;
+	Graph graph( totalSize );
 
-	totalSize = nodeSize + sinkSize;
+	success = create_links( graph, totalSize, sinkSize );
+	if( !success )
+	{
+		cout << "Invalid graph file. Exiting now. " << endl;
+		return 0;
+	}
 
-	int graph[ totalSize ][ totalSize ];
+	graph.printGraph();
 
+	
 	
 
 	/*
@@ -161,6 +179,41 @@ int main()
 	return 0;
 }
 
+bool create_links( Graph &graph, int totalSize, int sinkSize )
+{
+	ifstream fin;
+	int vertex;
+	int edges;
+	int pointer;
+	int temp;
+	float energy[ totalSize ];
+	fin.open( "links.txt" );
+
+	createRandomEnergy( energy, totalSize, sinkSize );
+
+	if( !fin.good() )
+	{
+		return false;
+	}
+	fin >> temp;
+	fin >> temp;
+
+	for ( int index = 0; index < totalSize; index++ )
+	{
+		fin >> vertex;
+		fin >> edges;
+		for ( int subIndex = 0; subIndex < edges; subIndex++ )
+		{
+			fin >> pointer;
+			graph.addEdge( index, 100.00, energy[ index ], 100.0, energy[ pointer ], pointer );
+		}
+	}
+
+	return true;
+}
+
+
+
 void createRandomEnergy( float arr[], int totalSize, int sinkSize )
 {
 
@@ -175,10 +228,10 @@ void createRandomEnergy( float arr[], int totalSize, int sinkSize )
 		{
 			arr[ index ] = ( float ) ( ( rand() % 100 ) + 1 ) / (float) 100.0;
 		}
-		cout << "energy " << arr[ index ] << endl;
+		//cout << "energy " << arr[ index ] << endl;
 	}
 }
-
+/*
 void createRandomPointers( int pointers[], int totalSize, int sinkSize )
 {
 	srand( time( 0 ) );
@@ -272,6 +325,8 @@ bool numExists( int arr[], int index, int temp )
 	}
 	return false;
 }
+
+*/
 
 
 
