@@ -116,17 +116,9 @@ void createRandomPointers( int pointers[], int totalSize, int sinkSize );
 void createNetwork( float energy[], int pointers[], Graph & graph );
 bool numExists( int arr[], int index, int temp );
 
-
-
-
-
-
-
-
-
 int main()
 {
-	
+	int totalPacketCommands = 0;
 	int nodeSize; 
 	int sinkSize;
 	int totalSize;
@@ -153,6 +145,7 @@ while( !fin.eof() )
 {
 	fin >> packetArr[ index ]. nodeNum;
 	fin >> packetArr[ index ]. numberOfPackets;
+	totalPacketCommands++;
 }
 
 	int graph[ totalSize ][ totalSize ];
