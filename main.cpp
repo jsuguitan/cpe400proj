@@ -23,6 +23,10 @@ using namespace std;
 //// Graph Definition ////
 //////////////////////////
 
+struct PacketInfo{
+	int nodeNum;
+	int numberOfPackets;
+};
 
 struct Node{
   float currentEnergy;
@@ -110,21 +114,21 @@ public:
    			cout << endl;
    		}
    	}
+};
 
+struct MinHeapNode
+{
 
+};
+
+struct MinHeap
+{
 
 };
 
 
 
 void createRandomEnergy( float arr[], int totalSize, int sinkSize );
-/*
-void createRandomPointers( int pointers[], int totalSize, int sinkSize );
-void createNetwork( float energy[], int pointers[], Graph & graph );
-bool numExists( int arr[], int index, int temp );
-*/
-
-//void create_graph( int 2d[ totalSize ][ totalSize ], int totalSize, int nodeSize, int sinkSize );
 bool create_links( Graph &graph, int totalSize, int sinkSize );
 
 int main()
@@ -190,33 +194,6 @@ int main()
 
 	graph.printGraph();
 
-	
-	
-
-	/*
-	int size = 8;
-	int sinkSize;
-	int totalSize;
-	
-
-	cout << "Enter the number of sinks (1-2) in the network: ";
-	cin >> sinkSize;
-	cout << endl;
-
-	totalSize = size + sinkSize;
-	Graph graph( totalSize );
-
-	float energy[ totalSize ];
-	int pointers[ totalSize ];
-
-	createRandomEnergy( energy, totalSize, sinkSize );
-	createRandomPointers( pointers, totalSize, sinkSize );
-
-	createNetwork( energy, pointers, graph );
-
-	graph.printGraph();
-
-	*/
 	return 0;
 }
 
@@ -272,102 +249,3 @@ void createRandomEnergy( float arr[], int totalSize, int sinkSize )
 		//cout << "energy " << arr[ index ] << endl;
 	}
 }
-/*
-void createRandomPointers( int pointers[], int totalSize, int sinkSize )
-{
-	srand( time( 0 ) );
-	int pointerTemp;
-	bool exists = false;
-	for ( int index = 0; index < totalSize; index++ )
-	{
-		pointerTemp = rand() % totalSize;
-		//don't want sinks to point to eachother
-		if( index < sinkSize )
-		{
-			while( pointerTemp == index || pointerTemp == index + 1 )
-			{
-				pointerTemp = rand() % totalSize;
-			}
-	
-			exists = numExists( pointers, index, pointerTemp );
-
-			while( exists )
-			{
-				pointerTemp = rand() % totalSize;
-
-				while( pointerTemp == index )
-				{
-					pointerTemp = rand() % totalSize;	
-				}
-
-				exists = numExists( pointers, index, pointerTemp );
-
-				if( sinkSize == index + 1 && pointerTemp < sinkSize )
-				{
-					exists = true;
-				}
-				if( pointers[ index ] == pointerTemp && pointers[ pointerTemp ] == index )
-				{
-					exists = true;
-				}
-			}
-
-			pointers[ index ] = pointerTemp;
-		}
-		else
-		{
-
-			while( pointerTemp == index )
-			{
-				pointerTemp = rand() % totalSize;	
-			}
-
-			exists = numExists( pointers, index, pointerTemp );
-
-			while( exists )
-			{
-				pointerTemp = rand() % totalSize;
-
-				while( pointerTemp == index )
-				{
-					pointerTemp = rand() % totalSize;	
-				}
-				exists = numExists( pointers, index, pointerTemp );
-
-				if( pointers[ index ] == pointerTemp && pointers[ pointerTemp ] == index )
-				{
-					exists = true;
-				}
-			}
-
-			pointers[ index ] = pointerTemp;
-		}
-		cout << "Pointers " << pointers[ index ] << endl;
-	}
-}
-
-
-void createNetwork( float energy[], int pointers[], Graph & graph )
-{
-	for ( int index = 0; index < graph.V; index++ )
-	{
-		graph.addEdge( index, 100.0, energy[ index ], 100.0, energy[ pointers[ index ]], pointers[ index ] );
-	}
-}
-
-bool numExists( int arr[], int index, int temp )
-{
-	for ( int j = 0; j < index; j++ )
-	{
-		if( temp == arr[ j ] )
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-*/
-
-
-
